@@ -10,6 +10,13 @@ module.exports.handler = sentryWrapper(async (event, context, callback) => {
     return errorResponse(callback, null, 401)
   }
 
+  // If no booking id there's nothing to cancel
+  const bookingId = typy(event, 'pathParameters.id').safeString
+  if (!bookingId) {
+    return errorResponse(callback, 'Booking id path parameter is required.', 400)
+  }
+
+  // The request looks good so far. Get an API token
   const token = await getToken()
 
   // First we need to get the user's reserved bookings. We need to validate that the user initiating this request
@@ -21,12 +28,8 @@ module.exports.handler = sentryWrapper(async (event, context, callback) => {
   }))
 
   // Check that the response contains a matching booking id, and if not, throw an error.
-  const bookingId = typy(event, 'pathParameters.id').safeString
-  if (!bookingId) {
-    return errorResponse(callback, 'Booking id path parameter is required.', 400)
-  }
   // Contrary to their documentation, the property is called "bookId" instead of "booking_id"
-  if (!typy(bookingsResponse).safeArray.some(booking => booking.bookId === bookingId)) {
+  if (!typy(bookingsResponse, 'data').safeArray.some(booking => booking.bookId === bookingId)) {
     return errorResponse(callback, null, 403)
   }
 

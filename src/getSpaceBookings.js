@@ -79,13 +79,17 @@ module.exports.handler = sentryWrapper(async (event, context, callback) => {
     statusCode: 200,
     data: [],
   }
+  let error
   results.forEach(result => {
     // If any of the requests fail, this API call wasn't really successful. Return an error.
     if (result.statusCode < 200 || result.statusCode >= 400) {
-      return errorResponse(callback, 'LibCal API returned an error.', result.statusCode)
+      error = () => errorResponse(callback, 'LibCal API returned an error.', result.statusCode)
     }
     output.data = output.data.concat(result.data)
   })
+  if (error) {
+    return error()
+  }
 
   // That's great and all, but we also want to know the name of the space the booking is at.
   // This requires yet another query...

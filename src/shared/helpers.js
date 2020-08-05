@@ -24,6 +24,6 @@ module.exports.getToken = async () => {
 // Format js Date to string with format YYYY-MM-DD
 module.exports.dateToYMD = date => {
   const offset = date.getTimezoneOffset() * 60 * 1000
-  const newDate = new Date(date.getTime() + offset)
+  const newDate = new Date(date.getTime() - offset)
   return newDate.toISOString().split('T')[0]
 }
