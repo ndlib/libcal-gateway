@@ -33,7 +33,7 @@ module.exports.handler = sentryWrapper(async (event, context, callback) => {
   }
 
   // At this point we've validated they are authorized. Send the cancel request
-  const cancelUrl = `${process.env.LIBCAL_API_URL}/space/bookings/${encodeURIComponent(bookingId)}`
+  const cancelUrl = `${process.env.LIBCAL_API_URL}/space/cancel/${encodeURIComponent(bookingId)}`
   const cancelResponse = await fetch(cancelUrl, {
     method: 'POST',
     headers: requestHeaders(token),
