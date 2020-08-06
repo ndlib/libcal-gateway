@@ -6,10 +6,12 @@ const bookingId = 'cs_111'
 const bookingsResponse = [
   {
     bookId: bookingId,
+    email: helper.defaultEmail,
   },
   {
     bookId: 'ignore',
     foo: 'bar',
+    email: helper.defaultEmail,
   },
 ]
 const pathParams = {
@@ -22,8 +24,8 @@ describe('cancelBooking', () => {
   })
 
   it('should check that booking belongs to user before sending cancel request', async () => {
-    const getBookingsNock = nock(process.env.LIBCAL_API_URL)
-      .get('/space/bookings')
+    const getBookingNock = nock(process.env.LIBCAL_API_URL)
+      .get(`/space/booking/${bookingId}`)
       .query(true)
       .reply(200, bookingsResponse)
 
@@ -32,7 +34,7 @@ describe('cancelBooking', () => {
       .reply(200, null)
 
     const callback = (ignore, response) => {
-      expect(getBookingsNock.isDone()).toBe(true)
+      expect(getBookingNock.isDone()).toBe(true)
       expect(cancelBookingNock.isDone()).toBe(true)
       expect(response.statusCode).toEqual(200)
     }
@@ -57,13 +59,18 @@ describe('cancelBooking', () => {
   })
 
   it('should throw forbidden if booking specified does not belong the current user\'s email address', async () => {
-    const getBookingsNock = nock(process.env.LIBCAL_API_URL)
-      .get('/space/bookings')
+    const getBookingNock = nock(process.env.LIBCAL_API_URL)
+      .get(`/space/booking/${bookingId}`)
       .query(true)
-      .reply(200, [])
+      .reply(200, [
+        {
+          bookId: bookingId,
+          email: 'bogus@not.real',
+        },
+      ])
 
     const callback = (ignore, response) => {
-      expect(getBookingsNock.isDone()).toBe(true)
+      expect(getBookingNock.isDone()).toBe(true)
       expect(response.statusCode).toEqual(403)
     }
 

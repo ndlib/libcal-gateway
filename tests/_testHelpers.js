@@ -1,6 +1,7 @@
 const nock = require('nock')
 
 module.exports.defaultNetId = 'test123'
+module.exports.defaultEmail = `${exports.defaultNetId}@test.email`
 module.exports.fakeToken = 'abcd8f1'
 
 module.exports.mockTokenFetch = () => {
