@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "a164ce1b-6142-4bf8-ae7f-ae063f9730b5",
+		"name": "Libcal Gateway - QA",
+		"description": "# Libcal Gateway API\n\nThis collection will run basic smoke tests to ensure that the API is running as expected.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test Locations Endpoint",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "34e01281-1274-496a-b339-94886e156f9c",
+						"exec": [
+							"// Load the HTML into cheerio, which will let us easily select attributes for testing.",
+							"const $ = cheerio.load(pm.response.text());",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response time is less than 5000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{libcalGatewayApiUrl}}/space/locations",
+					"host": [
+						"{{libcalGatewayApiUrl}}"
+					],
+					"path": [
+						"space",
+						"locations"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "657699a3-b1fc-467d-8791-abfb409ec7e3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "fc7e502e-ae0d-4975-8fc4-0c8df701e68b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "5022b32f-a91a-428e-ac79-742333eaa765",
+			"key": "libcalGatewayApiUrl",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
