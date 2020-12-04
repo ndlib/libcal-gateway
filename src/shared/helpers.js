@@ -27,3 +27,34 @@ module.exports.dateToYMD = date => {
   const newDate = new Date(date.getTime() - offset)
   return newDate.toISOString().split('T')[0]
 }
+
+module.exports.getTimeString = (timeString) => {
+  let timeArray = timeString.split(':')
+  timeArray = timeArray.map((t) => {
+    return parseInt(t)
+  })
+
+  if (timeArray[0] === 12) {
+    timeArray[0] = 0
+  }
+  if (timeString.toLowerCase().includes('pm')) {
+    timeArray[0] += 12
+  }
+
+  timeArray = timeArray.map((num) => {
+    if (num < 10) {
+      num = '0' + num
+    }
+    return num
+  })
+
+  if (!timeArray[1]) {
+    timeArray[1] = '00'
+  }
+
+  if (!timeArray[2]) {
+    timeArray[2] = '00'
+  }
+
+  return 'T' + timeArray[0] + ':' + timeArray[1] + ':' + timeArray[2]
+}

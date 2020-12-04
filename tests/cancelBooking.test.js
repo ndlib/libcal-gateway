@@ -30,7 +30,7 @@ describe('cancelBooking', () => {
       .reply(200, bookingsResponse)
 
     const cancelBookingNock = nock(process.env.LIBCAL_API_URL)
-      .post(`/space/bookings/${bookingId}`)
+      .post(`/space/cancel/${bookingId}`)
       .reply(200, null)
 
     const callback = (ignore, response) => {
