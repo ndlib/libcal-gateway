@@ -11,7 +11,7 @@ module.exports.mockTokenFetch = () => {
     .reply(200, JSON.stringify(exports.fakeToken))
 }
 
-module.exports.getEvent = (pathParams, queryParams, body, netid) => {
+module.exports.getEvent = (pathParams, queryParams, body, netid, headers) => {
   // Allow passing null to explicitly set netid to null; undefined will use defaultNetId
   if (!netid && netid !== null) {
     netid = exports.defaultNetId
@@ -26,5 +26,6 @@ module.exports.getEvent = (pathParams, queryParams, body, netid) => {
     body: typeof body === 'string' ? body : JSON.stringify(body),
     pathParameters: pathParams || {},
     queryStringParameters: queryParams || {},
+    headers: headers || {},
   }
 }

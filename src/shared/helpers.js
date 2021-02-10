@@ -58,3 +58,12 @@ module.exports.getTimeString = (timeString) => {
 
   return 'T' + timeArray[0] + ':' + timeArray[1] + ':' + timeArray[2]
 }
+
+module.exports.stripHtml = (data) => {
+  // The full match for this is the entire opening tag, closing tag, and content in between.
+  // Group 1 = tag name (ex: "a", "br", "div")
+  // Group 2 = properties string to keep (ex: " href='something.com'") May be undefined.
+  // Group 3 = content inside tag. Will be undefined if self-closing tag.
+  const htmlRegex = /<(.+?)(?:(?:(?=\shref=")|\s[\s\S]*?)(?:(\shref=".*?")[\s\S]*?)?(?=\/?>)|(?=\/?>))(?:\/>|>([\s\S]*?)<\/.*?>)/g
+  return data.replace(htmlRegex, '<$1$2>$3</$1>')
+}
