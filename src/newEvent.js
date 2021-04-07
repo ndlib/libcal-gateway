@@ -141,6 +141,8 @@ const handleEvent = (e) => {
   const splitContent = sanitizedDescription ? sanitizedDescription.split('\n') : [undefined]
   if (splitContent.length > 0) {
     event.shortDescription = splitContent.find(line => line && line.length >= 50) || splitContent[0]
+    // Now remove <p> tags. We want plain text in this field.
+    event.shortDescription = event.shortDescription.replace(/<\/?p.*?>/g, '')
   }
 
   let start = typy(e, 'start').safeString
